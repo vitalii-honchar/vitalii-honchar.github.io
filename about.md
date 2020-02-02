@@ -19,3 +19,11 @@ permalink: /about/
 * Гра на гітарі
 * Фотографія
 * Спорт
+
+
+### Контакти
+E-mail: [weaxme@gmail.com](mailto:weaxme@gmail.com)
+
+GitHub: [WeaxMe](https://github.com/WeaxMe)
+
+LinkedIn: [Vitalii Honchar](https://www.linkedin.com/in/vitalii-honchar-20031413b/)
