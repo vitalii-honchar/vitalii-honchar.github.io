@@ -1,10 +1,10 @@
-title: WeaxMe
-email: weaxme@gmail.com
+title: Vitalii Honchar Blog
+email: vitaliy.gonchar.work@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Блог юзера WeaxMe
+  Vitalii Honchar Blog
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  WeaxMe
+github_username:  vitalii-honchar
 
 # Build settings
 markdown: kramdown
