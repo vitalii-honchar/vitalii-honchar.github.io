@@ -1,27 +1,23 @@
 ---
 layout: page
-title: "Про Блог"
+title: "About"
 permalink: /about/
 ---
 
 Hello,
 My name is Vitalii and I'm software engineer. I'm starting write this blog for note my thoughts and ideas about life, engineering and so on. 
 
-Сфери які мене цікавлять:
-* Back-End
-* Front-End
-* Highload
-* Бази даних
-* IoT
-* Машинне навчання
-* Гра на гітарі
-* Фотографія
-* Спорт
+I'm highly interested in:
+
+* Software Architecture
+* DDD
+* Go
+* DevOps
 
 
-### Контакти
-E-mail: [weaxme@gmail.com](mailto:weaxme@gmail.com)
+### Contacs
+E-mail: [vitaliy.gonchar.work@gmail.com](mailto:vitaliy.gonchar.work@gmail.com)
 
-GitHub: [WeaxMe](https://github.com/WeaxMe)
+GitHub: [vitalii-honchar](https://github.com/vitalii-honchar)
 
-LinkedIn: [Vitalii Honchar](https://www.linkedin.com/in/vitalii-honchar-20031413b/)
+LinkedIn: [Vitalii Honchar](https://www.linkedin.com/in/vitaliihonchar/)
