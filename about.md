@@ -4,10 +4,8 @@ title: "Про Блог"
 permalink: /about/
 ---
 
-Привіт!
-
-Мене звати Віталій. 
-Я програміст і в даному блозі буду писати про програмування та про інші речі, які мене цікавлять.
+Hello,
+My name is Vitalii and I'm software engineer. I'm starting write this blog for note my thoughts and ideas about life, engineering and so on. 
 
 Сфери які мене цікавлять:
 * Back-End
