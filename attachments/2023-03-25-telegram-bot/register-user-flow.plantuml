@@ -1,0 +1,27 @@
+@startuml
+autonumber
+actor       User       as user
+participant "AWS Lambda" as lambda
+participant Bot as bot
+database    DynamoDB    as dynamodb
+
+activate user
+
+    user -> lambda: HTTP request\nwith /start command
+    activate lambda
+        lambda -> lambda: Start bot
+        lambda -> lambda: Wrap HTTP request into AWS event
+        lambda -> bot: AWS event with /start command 
+    deactivate lambda
+    activate bot
+        bot -> bot: Retrieve chat id from\nAWS event with /start command
+        bot -> dynamodb: Save chat id
+        activate dynamodb
+            dynamodb -> bot: OK
+        deactivate dynamodb
+        bot -> user: OK
+    deactivate bot    
+
+deactivate user
+
+@enduml
