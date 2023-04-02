@@ -1,0 +1,32 @@
+@startuml
+autonumber
+actor       Device       as device
+participant Service as svc
+queue NATS as nats
+
+group "No NATS connection"
+    activate device
+        device -> svc: POST /telemetry
+        activate svc
+            svc x--> nats: Publish telemetry message
+            svc -> svc: Cache message to publish later
+            svc -> device: 200 OK
+    deactivate device
+end
+...
+
+
+group "Service is unrestorable"
+    svc -> svc: NATS connection becomes CLOSED
+
+    activate device
+        device -> svc: POST /telemetry
+        svc -> device: 500 Internal error
+    deactivate device
+
+
+    deactivate svc
+end
+
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+autonumber
+actor       Device       as device
+participant Service as svc
+queue NATS as nats
+
+activate device
+    device -> svc: POST /telemetry
+
+    activate svc
+        svc --> nats: Publish telemetry message
+        svc -> device: 200 OK
+    deactivate svc
+deactivate device
+
+@enduml
