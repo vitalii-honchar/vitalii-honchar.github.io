@@ -1,0 +1,35 @@
+@startuml
+autonumber
+actor       Test       as test
+participant Service as svc
+participant Toxiproxy as proxy
+queue NATS as nats
+
+activate test
+
+    test -> proxy: Disable NATS connection
+    activate proxy
+        proxy -> test: OK
+    deactivate proxy
+
+    test -> svc: POST /telemetry
+    activate svc
+        svc x--> proxy: Publish NATS message
+        svc -> test: 200 OK
+    deactivate svc
+
+    test -> test: Wait 3 seconds
+    test -> proxy: Enable NATS connection
+    activate proxy
+        proxy -> test: OK
+    deactivate proxy
+    
+    activate svc
+        svc --> proxy: Publish NATS message
+    deactivate svc
+    proxy --> nats: Publish NATS message
+
+    test <-- nats: NATS message
+deactivate test
+
+@enduml

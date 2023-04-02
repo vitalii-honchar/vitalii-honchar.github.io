@@ -1,0 +1,23 @@
+@startuml
+autonumber
+actor       Device       as device
+participant Service as svc
+queue NATS as nats
+
+group "No NATS connection"
+    activate device
+        device -> svc: POST /telemetry
+        activate svc
+            svc x--> nats: Publish telemetry message
+            svc -> svc: Cache message to publish later
+            svc -> device: 200 OK
+    deactivate device
+end
+
+group "NATS connection restored"
+    svc -> svc: NATS connection restored
+    svc --> nats: Publish telemetry message
+deactivate svc
+end
+
+@enduml
