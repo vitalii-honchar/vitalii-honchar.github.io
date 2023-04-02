@@ -1,0 +1,40 @@
+@startuml
+autonumber
+
+participant "AWS Event Bridge" as bridge
+participant "AWS Lambda" as lambda
+participant Bot as bot
+participant HackerNews as hackernews
+database    DynamoDB    as dynamodb
+actor       User       as user
+
+activate bridge
+
+    bridge -> lambda: Scheduled event
+
+deactivate bridge
+
+activate lambda
+    lambda -> lambda: Start bot
+    lambda -> bot: Scheduled event 
+deactivate lambda
+
+activate bot
+    bot -> hackernews: Get last news
+    activate hackernews
+        hackernews -> bot: Last news
+    deactivate hackernews
+
+    bot -> dynamodb: Read all users which
+    activate dynamodb
+        dynamodb -> bot: Users
+    deactivate dynamodb
+
+    bot --> user: Send news to user 1
+    bot --> user: Send news to user 2
+    ...
+    bot --> user: Send news to user N
+deactivate bot
+
+
+@enduml
