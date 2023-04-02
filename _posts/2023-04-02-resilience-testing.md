@@ -34,7 +34,11 @@ Resilience tests can make a software system more robust and decrease times for w
 
 Theory sounds good, but in this post I will explain only how to write E2E test which will test loosing of connection to a message broker and then restoring it. To do so I created simple service which accepts HTTP requests and publishes message to a message broker.
 
-# Service Architecture
+# Service overview
+An example service contains a simple HTTP endpoint which receives a request and sends it to NATS message broker.
+I chose NATS as example of infrastructure component which can have an outage during system runtime, because NATS client has very interesting property: after lose a connection with NATS broker client tries to retry and when retry limit was reached client moves to `CLOSED` state and never tries to retry again. Which means that service which used NATS client goes to permanent outage, because service can't restore connection with NATS message broker by default NATS client configuration. I already saw service outage with loosing NATS connection some time ago, that's why I chose a NATS as example.
+
+
 
 # Resources
 * 
