@@ -1,0 +1,28 @@
+@startuml
+autonumber
+actor       Test       as test
+participant Service as svc
+queue NATS as nats
+
+activate svc
+
+    svc -> svc: Business logic 1
+    svc --> nats: Publish event 1
+    
+    activate test
+        test -> svc: Deactivate NATS
+        svc -> svc: Business logic 2
+        svc x--> nats: Publish event 2
+        ...
+        svc -> svc: Business logic N
+        svc x---> nats: Publish event N
+        test -> test: Check service state
+        test -> svc: Enable NATS
+        svc --> nats: Publish missed events
+        test -> test: Check that service\nrestored system state
+    deactivate test
+
+
+deactivate svc
+
+@enduml
