@@ -4,6 +4,8 @@ title: "About"
 permalink: /about/
 ---
 
+<img align="right" width="50%" height="50%" src="/attachments/my_photo.jpg">
+
 Hello,
 My name is Vitalii and I'm software engineer. I like to develop projects,
 travel, doing sport. 
