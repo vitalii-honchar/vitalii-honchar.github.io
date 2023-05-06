@@ -4,16 +4,23 @@ title: "About"
 permalink: /about/
 ---
 
+<img align="right" width="50%" height="50%" src="/attachments/my_photo.jpg">
+
 Hello,
-My name is Vitalii and I'm software engineer. I'm starting write this blog for note my thoughts and ideas about life, engineering and so on. 
+My name is Vitalii and I'm software engineer. I like to develop projects,
+travel, doing sport. 
 
-I'm highly interested in:
+Also I like to drive a car and I have a dream to finish my 
+study for drive a motorcycle and to have weekends motorcycle trips 😎.
 
-* Software Architecture
-* DDD
-* Go
-* DevOps
+I'm writing about:
 
+* Software Architecture.
+* Domain Driven Design.
+* Programming languages: Go, Kotlin, Java, Python, JavaScript.
+* Team leadership.
+* Cybersecurity and DevOps practics.
+* Gym and boxing.
 
 ### Contacs
 E-mail: [vitaliy.gonchar.work@gmail.com](mailto:vitaliy.gonchar.work@gmail.com)
