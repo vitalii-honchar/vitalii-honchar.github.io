@@ -9,6 +9,7 @@ github_username:  vitalii-honchar
 markdown: kramdown
 theme: minima
 
+google_analytics: G-MMW5BJBFPL
 
 minima:
   date_format: "%d-%m-%Y"
