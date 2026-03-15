@@ -390,25 +390,111 @@ permalink: /kate/
   const dust  = buildDust(900);
   scene.add(heart, ring, dust);
 
+  // ── Traveler heart (small glowing sprite that traces the curve) ───────────
+  function makeTravelerSprite(color) {
+    const sz = 128, c = document.createElement('canvas');
+    c.width = c.height = sz;
+    const ctx = c.getContext('2d');
+    // outer glow
+    const g1 = ctx.createRadialGradient(sz/2, sz/2, 0, sz/2, sz/2, sz/2);
+    g1.addColorStop(0,    color.replace(')', ',1)').replace('rgb','rgba'));
+    g1.addColorStop(0.35, color.replace(')', ',0.6)').replace('rgb','rgba'));
+    g1.addColorStop(1,    color.replace(')', ',0)').replace('rgb','rgba'));
+    ctx.fillStyle = g1;
+    ctx.fillRect(0, 0, sz, sz);
+    // bright core
+    const g2 = ctx.createRadialGradient(sz/2, sz/2, 0, sz/2, sz/2, sz/6);
+    g2.addColorStop(0, 'rgba(255,255,255,1)');
+    g2.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g2;
+    ctx.fillRect(0, 0, sz, sz);
+    return new THREE.CanvasTexture(c);
+  }
+
+  // Trail sprites — N sprites behind traveler forming a comet tail
+  const TRAIL_LEN = 18;
+  const travelerGroup = new THREE.Group();
+  scene.add(travelerGroup);
+
+  const travelerSprites = [];
+  const travelerColors = ['rgb(255,77,109)', 'rgb(189,127,255)', 'rgb(61,250,205)'];
+
+  for (let i = 0; i < TRAIL_LEN; i++) {
+    const frac   = 1 - i / TRAIL_LEN;
+    const colStr = travelerColors[Math.floor((1 - frac) * travelerColors.length) % travelerColors.length];
+    const tex    = makeTravelerSprite(colStr);
+    const mat    = new THREE.SpriteMaterial({
+      map: tex, transparent: true, depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      opacity: frac * frac * 0.95,
+    });
+    const sprite = new THREE.Sprite(mat);
+    const s = 0.09 + frac * 0.18;
+    sprite.scale.set(s, s, 1);
+    travelerGroup.add(sprite);
+    travelerSprites.push({ sprite, mat, baseFrac: frac });
+  }
+
+  // ── Curve data — pre-sample heart in 3D (matches heart particle scale) ────
+  const CURVE_SAMPLES = 600;
+  const HEART_SCALE   = 0.075;
+  const curvePoints   = [];
+  for (let i = 0; i <= CURVE_SAMPLES; i++) {
+    const t = (i / CURVE_SAMPLES) * Math.PI * 2;
+    const p = heartXY(t);
+    curvePoints.push(new THREE.Vector3(
+      p.x * HEART_SCALE,
+      p.y * HEART_SCALE + 0.15,
+      0
+    ));
+  }
+
   // ── Animation loop ────────────────────────────────────────────────────────
   let clock = 0;
   function tick() {
     requestAnimationFrame(tick);
-    clock += 0.007;
+    clock += 0.018;  // 2.5× faster than before
 
-    // Heart breathes and spins gently
-    const breathe = 1 + 0.035 * Math.sin(clock * 1.6);
+    // Heart breathes and spins
+    const breathe = 1 + 0.045 * Math.sin(clock * 2.2);
     heart.scale.setScalar(breathe);
-    heart.rotation.y  =  clock * 0.18;
-    heart.rotation.x  =  Math.sin(clock * 0.35) * 0.07;
+    heart.rotation.y = clock * 0.45;
+    heart.rotation.x = Math.sin(clock * 0.5) * 0.1;
 
-    // Ring counter-rotates
-    ring.rotation.y = -clock * 0.11;
-    ring.rotation.z =  clock * 0.04;
+    // Ring counter-rotates faster
+    ring.rotation.y = -clock * 0.28;
+    ring.rotation.z =  clock * 0.09;
+
+    // Traveler traces heart curve — speed controlled by clock
+    const TRAVEL_SPEED = 0.55;  // full loops per second (fast!)
+    const travelerT    = (clock * TRAVEL_SPEED) % 1;
+
+    // position traveler group to match heart's current transform
+    travelerGroup.rotation.copy(heart.rotation);
+    travelerGroup.scale.copy(heart.scale);
+
+    for (let i = 0; i < TRAIL_LEN; i++) {
+      // Each trail sprite is slightly behind the head
+      const trailOffset = i * 0.012;
+      const t = ((travelerT - trailOffset) % 1 + 1) % 1;
+      const idx = Math.floor(t * CURVE_SAMPLES) % CURVE_SAMPLES;
+      const pt  = curvePoints[idx];
+
+      travelerSprites[i].sprite.position.copy(pt);
+
+      // Pulse opacity at the head
+      const pulse = 0.7 + 0.3 * Math.sin(clock * 6 - i * 0.4);
+      travelerSprites[i].mat.opacity = travelerSprites[i].baseFrac * travelerSprites[i].baseFrac * pulse;
+
+      // Color cycles through palette as it travels
+      const colPct = (travelerT + i * 0.015) % 1;
+      const col = paletteColor(colPct);
+      travelerSprites[i].mat.color.set(col);
+    }
 
     // Subtle camera float
-    camera.position.x = Math.sin(clock * 0.12) * 0.12;
-    camera.position.y = Math.cos(clock * 0.18) * 0.08;
+    camera.position.x = Math.sin(clock * 0.15) * 0.15;
+    camera.position.y = Math.cos(clock * 0.22) * 0.10;
     camera.lookAt(0, 0.15, 0);
 
     renderer.render(scene, camera);
