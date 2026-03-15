@@ -11,23 +11,24 @@ permalink: /kate/
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html {
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
-    }
-
-    body {
-      min-height: 100vh;
       background: #0a0010;
       font-family: 'Georgia', serif;
-      /* NO overflow:hidden — let it scroll */
-      position: relative;
     }
 
-    /* ── Starfield (fixed, behind everything) ── */
+    /* ── Starfield (fixed, non-interactive) ── */
     #stars {
       position: fixed;
-      inset: 0;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
+      touch-action: none;
       z-index: 0;
     }
 
@@ -38,11 +39,11 @@ permalink: /kate/
       height: min(600px, 100vw);
       border-radius: 50%;
       background: radial-gradient(circle, rgba(255,77,139,0.18) 0%, transparent 70%);
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
       pointer-events: none;
+      touch-action: none;
       animation: glowPulse 3s ease-in-out infinite;
     }
     @keyframes glowPulse {
@@ -50,11 +51,13 @@ permalink: /kate/
       50%       { opacity: 1;   transform: translate(-50%,-50%) scale(1.15); }
     }
 
-    /* ── Floating hearts (fixed layer) ── */
+    /* ── Floating hearts (fixed, non-interactive) ── */
     .heart-bg {
       position: fixed;
-      inset: 0;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
+      touch-action: none;
       z-index: 2;
       overflow: hidden;
     }
@@ -62,6 +65,7 @@ permalink: /kate/
       position: absolute;
       bottom: -60px;
       opacity: 0;
+      pointer-events: none;
       animation: floatUp linear infinite;
     }
     @keyframes floatUp {
@@ -80,6 +84,8 @@ permalink: /kate/
       align-items: center;
       padding: 60px 24px 80px;
       gap: 0;
+      /* ensure page content is above fixed layers and scrollable */
+      isolation: isolate;
     }
 
     /* ── Hero section ── */
